@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <!-- MODAL SECTIONS -->
   </div>
 </template>
 

@@ -30,5 +30,11 @@ namespace amazen_server.Repositories
       return userInfo;
     }
 
+    public Profile GetProfileById(string profileId)
+    {
+      string sql = "SELECT * FROM profiles WHERE id = @ProfileId";
+      return _db.QueryFirstOrDefault<Profile>(sql, new { profileId });
+    }
+
   }
 }

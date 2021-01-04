@@ -12,7 +12,7 @@ namespace amazen_server.Controllers
 {
 
   [ApiController]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   public class ProfileController : ControllerBase
   {
     private readonly ProfilesService _ps;
@@ -38,6 +38,22 @@ namespace amazen_server.Controllers
         return BadRequest(e.Message);
       }
     }
+
+    [HttpGet("{profileId}/keeps")]
+
+    public async Task<ActionResult<ProfileController>> GetKeepsByProfileId(string profileId)
+    {
+      try
+      {
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        return Ok(_ks.GetKeepsByProfileId(profileId, userInfo.Id));
+      }
+      catch (System.Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
 
   }
 }

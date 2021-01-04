@@ -21,5 +21,18 @@ namespace amazen_server.Services
       }
       return foundProfile;
     }
+
+    public object GetProfileById(string profileId)
+    {
+      Profile foundProfile = _repo.GetProfileById(profileId);
+      if (foundProfile == null)
+      {
+        throw new Exception("This Profile does not exist!");
+      }
+      else
+      {
+        return foundProfile;
+      }
+    }
   }
 }

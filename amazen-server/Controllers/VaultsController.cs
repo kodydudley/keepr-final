@@ -11,26 +11,26 @@ using CodeWorks.Auth0Provider;
 
 namespace amazen_server.Controllers
 {
+
   [ApiController]
   [Route("api/[controller]")]
-  public class KeepsController : ControllerBase
+  public class VaultsController : ControllerBase
   {
-    private readonly KeepsService _ks;
-
-    public KeepsController(KeepsService ks)
+    private readonly VaultsService _vs;
+    public VaultsController(VaultsService vs)
     {
-      _ks = ks;
+      _vs = vs;
     }
 
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult<Keep>> Create([FromBody] Keep newKeep)
+    public async Task<ActionResult<Vault>> Create([FromBody] Vault newVault)
     {
       try
       {
         Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-        newKeep.CreatorId = userInfo.Id;
-        Keep created = _ks.Create(newKeep);
+        newVault.CreatorId = userInfo.Id;
+        Vault created = _vs.Create(newVault);
         created.Creator = userInfo;
         return Ok(created);
       }
@@ -41,11 +41,11 @@ namespace amazen_server.Controllers
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Keep>> Get()
+    public ActionResult<IEnumerable<Vault>> Get()
     {
       try
       {
-        return Ok(_ks.Get());
+        return Ok(_vs.Get());
       }
       catch (System.Exception e)
       {
@@ -54,29 +54,13 @@ namespace amazen_server.Controllers
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Keep> GetById(int id)
+    public ActionResult<Vault> GetById(int id)
     {
       try
       {
-        return Ok(_ks.GetById(id));
+        return Ok(_vs.GetById(id));
       }
       catch (Exception e)
-      {
-        return BadRequest(e.Message);
-      }
-    }
-
-    [HttpPut("{id}")]
-    [Authorize]
-    public async Task<ActionResult<Keep>> Edit(int id, [FromBody] Keep updated)
-    {
-      try
-      {
-        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-        updated.Id = id;
-        return Ok(_ks.Edit(updated, userInfo));
-      }
-      catch (System.Exception e)
       {
         return BadRequest(e.Message);
       }
@@ -89,7 +73,7 @@ namespace amazen_server.Controllers
       try
       {
         Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-        return Ok(_ks.Delete(id, userInfo));
+        return Ok(_vs.Delete(id, userInfo));
       }
       catch (Exception e)
       {
