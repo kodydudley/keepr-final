@@ -1,12 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark navBG">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img
-          alt="logo"
-          src="../assets/img/cw-logo.png"
-          height="45"
-        />
+      <div class="d-flex flex-column align-items-center text-dark">
+        <h1 class="border border-dark px-2">
+          K
+        </h1>
       </div>
     </router-link>
     <button
@@ -20,19 +18,12 @@
     >
       <span class="navbar-toggler-icon" />
     </button>
+
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link :to="{ name: 'Home' }" class="nav-link">
-            Home
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'About' }" class="nav-link">
-            About
-          </router-link>
-        </li>
-      </ul>
+      <div class="form-group has-search search-width">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
       <span class="navbar-text">
         <button
           class="btn btn-outline-primary text-uppercase"
@@ -44,7 +35,7 @@
 
         <div class="dropdown" v-else>
           <div
-            class="dropdown-toggle"
+            class="dropdown-toggle darkBG rounded text-light"
             @click="state.dropOpen = !state.dropOpen"
           >
             <img
@@ -123,5 +114,40 @@ a:hover {
 }
 .nav-item .nav-link.router-link-exact-active{
   color: var(--primary);
+}
+
+.navBG{
+  background-color: #55EFC4;
+}
+
+.rounded{
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.darkBG{
+  background-color: rgb(28, 28, 28);
+}
+
+.search-width{
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #55EFC4;
 }
 </style>
