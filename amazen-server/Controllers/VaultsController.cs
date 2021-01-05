@@ -17,9 +17,11 @@ namespace amazen_server.Controllers
   public class VaultsController : ControllerBase
   {
     private readonly VaultsService _vs;
-    public VaultsController(VaultsService vs)
+    private readonly VaultKeepsService _vks;
+    public VaultsController(VaultsService vs, VaultKeepsService vks)
     {
       _vs = vs;
+      _vks = vks;
     }
 
     [HttpPost]
@@ -59,6 +61,19 @@ namespace amazen_server.Controllers
       try
       {
         return Ok(_vs.GetById(id));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
+    [HttpGet("{id}/keeps")]
+    public ActionResult<Vault> GetKeepsByVaultId(int id)
+    {
+      try
+      {
+        return Ok(_vks.GetKeepsByVaultId(id));
       }
       catch (Exception e)
       {
