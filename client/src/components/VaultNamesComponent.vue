@@ -1,13 +1,16 @@
 <template>
   <div class="vaultNamesComponent">
     <button class="btn btn-transparent">
-      {{ profileVaults.name }}
+      <div v-if="profile.id == profileVaults.creatorId">
+        {{ profileVaults.name }}
+      </div>
     </button>
   </div>
 </template>
 
 <script>
 import { computed, reactive } from 'vue'
+import { AppState } from '../AppState'
 
 export default {
   name: 'VaultNamesComponent',
@@ -17,6 +20,7 @@ export default {
     })
     return {
       state,
+      profile: computed(() => AppState.profile),
       profileVaults: computed(() => props.vaultProp)
 
     }

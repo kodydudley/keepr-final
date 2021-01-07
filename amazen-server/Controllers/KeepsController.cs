@@ -83,7 +83,7 @@ namespace amazen_server.Controllers
     }
     [HttpPut("{id}/keepAmount")]
     [Authorize]
-    public async Task<ActionResult<Keep>> EditKeepAmount(int id, [FromBody] Keep updated)
+    public async Task<ActionResult<Keep>> EditKeepAmount(int id, [FromQuery] Keep updated)
     {
       try
       {

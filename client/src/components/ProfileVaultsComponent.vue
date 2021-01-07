@@ -18,7 +18,7 @@
 
 <script>
 import { computed, reactive } from 'vue'
-// import { AppState } from '../AppState'
+import { AppState } from '../AppState'
 // import CreateKeepComponent from '../components/CreateKeepComponent'
 // import CreateVaultComponent from '../components/CreateVaultComponent'
 // import ProfileKeepsComponent from '../components/ProfileKeepsComponent'
@@ -32,7 +32,8 @@ export default {
     })
     return {
       state,
-      profileVaults: computed(() => props.vaultProp)
+      profileVaults: computed(() => props.vaultProp),
+      profile: computed(() => AppState.profile)
 
     }
   },

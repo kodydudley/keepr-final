@@ -42,9 +42,9 @@ class KeepsService {
     }
   }
 
-  async keepCount(keepId) {
+  async keepCount(id) {
     try {
-      await api.put('api/keeps/' + keepId + '/keepAmount?views=1')
+      await api.put('api/keeps/' + id + '/keepAmount?keeps=1')
     } catch (err) {
       logger.error(err)
     }

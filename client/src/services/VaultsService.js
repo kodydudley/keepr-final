@@ -36,6 +36,41 @@ class VaultsService {
       logger.error(err)
     }
   }
+
+  async getById(id) {
+    try {
+      const res = await api.get('api/vaults/' + id)
+      AppState.activeVault = res.data
+    } catch (err) {
+      logger.error(err)
+    }
+  }
+
+  async getVaultKeepsById(id) {
+    try {
+      const res = await api.get('api/vaults/' + id + '/keeps')
+      AppState.activeVaultKeeps = res.data
+      logger.log(AppState.activeVaultKeeps)
+    } catch (err) {
+      logger.error(err)
+    }
+  }
+
+  async deleteVK(id) {
+    try {
+      await api.delete('api/vaultkeeps/' + id)
+    } catch (err) {
+      logger.log(err)
+    }
+  }
+
+  async deleteVault(id) {
+    try {
+      await api.delete('api/vaults/' + id)
+    } catch (err) {
+      logger.log(err)
+    }
+  }
 }
 
 export const vaultsService = new VaultsService()

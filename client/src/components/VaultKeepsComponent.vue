@@ -1,20 +1,23 @@
 <template>
-  <div class="keepComponent card border-0" @click.prevent="viewCount()" data-toggle="modal" :data-target="'#keepModal'+ keep.id">
-    <img class="img-fluid round" style="width: 100%; height: auto" :src="keep.img" alt="">
-    <div class="card-img-overlay d-flex justify-content-end flex-column text-light">
-      <h6 class="text-left text-white">
-        {{ keep.name }}
-      </h6>
-    </div>
-    <div class="card-img-overlay d-flex justify-content-right">
-      <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
-        <img class="tiny-picture left-side " :src="keep.creator.picture" alt="">
-      </router-link>
+  <div class="vaultKeepsComponent card border-0" data-toggle="modal" :data-target="'#keepModal'+ state.keepData.id">
+    <div class="card border-0" data-toggle="modal" :data-target="'#keepModal'+ state.keepData.id">
+      <img class="img-fluid round" style="width: 100%; height: auto" :src="state.keepData.img" alt="">
+      <div class="card-img-overlay d-flex justify-content-end flex-column text-light">
+        <h6 class="text-left text-white">
+          {{ state.keepData.name }}
+        </h6>
+      </div>
+      <div class="card-img-overlay d-flex justify-content-right">
+        <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: state.keepData.creatorId}}">
+          <img class="tiny-picture left-side " :src="state.keepData.creator.picture" alt="">
+        </router-link>
+      </div>
     </div>
   </div>
+
   <!-- MODAL SECTION -->
   <div class="modal fade keepModal"
-       :id="'keepModal' + keep.id"
+       :id="'keepModal' + state.keepData.id"
        tabindex="-1"
        role="document"
        aria-labelledby="myLargeModalLabel"
@@ -24,29 +27,34 @@
       <div class="modal-content">
         <div class="row">
           <div class="col-6">
-            <img :src="keep.img" class="img-fluid m-2" alt="">
+            <img :src="state.keepData.img" class="img-fluid m-2" alt="">
           </div>
           <div class="col-5 ml-2">
             <div class="row">
               <div class="col-6 text-center">
-                <i class="far fa-eye green"></i> {{ keep.views }}
+                <i class="far fa-eye green"></i> {{ state.keepData.views }}
               </div>
               <div class="col-6 text-center">
-                <i class="fab fa-korvue green"></i> {{ keep.keeps }}
+                <i class="fab fa-korvue green"></i>
               </div>
             </div>
             <div class="row mt-5 mb-5">
               <div class="col-12 text-center mb-5">
                 <h2>
-                  {{ keep.name }}
+                  {{ state.keepData.name }}
                 </h2>
                 <h6 class="mt-5 text-grey">
-                  {{ keep.description }}
+                  {{ state.keepData.description }}
                 </h6>
               </div>
             </div>
             <div class="row mt-5 d-flex justify-content-around">
-              <div class="dropdown bottom-left">
+              <router-link data-dismiss="modal" :to="{name: 'Home'}">
+                <div class="btn btn-danger bottom-left" @click.prevent="deleteVK(state.keepData.vaultKeepId)">
+                  Remove from Vault
+                </div>
+              </router-link>
+              <!-- <div class="dropdown bottom-left">
                 <button class="btn btn-success dropdown-toggle"
                         type="button"
                         id="dropdownMenuButton"
@@ -58,20 +66,20 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a v-for="vault in profileVaults" :key="vault.id" class="dropdown-item" href="#">
-                    <div @click="addToVault(vault.id, keep.id), keepCount(keep.id)">
+                    <div @click="addToVault(vault.id, keep.id)">
                       <vault-names-component :vault-prop="vault" />
                     </div>
                   </a>
                 </div>
-              </div>
-              <button v-show="profile.id == keep.creatorId" @click="deleteKeep(keep.id)" type="button" class="btn btn-transparent text-danger bottom-middle">
+              </div> -->
+              <button type="button" class="btn btn-transparent text-danger bottom-middle">
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
-              <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
-                <img class="tiny-picture left-side " :src="keep.creator.picture" alt="">
+              <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: state.keepData.creatorId}}">
+                <img class="tiny-picture left-side " :src="state.keepData.creator.picture" alt="">
               </router-link>
               <p class="mt-3 bottom-right">
-                {{ keep.creator.name }}
+                {{ state.keepData.creator.name }}
               </p>
             </div>
           </div>
@@ -82,33 +90,19 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
-import { keepsService } from '../services/KeepsService'
+import { reactive } from 'vue'
 import { vaultsService } from '../services/VaultsService'
-import { AppState } from '../AppState'
-import { logger } from '../utils/Logger'
-import VaultNamesComponent from './VaultNamesComponent.vue'
 import swal from 'sweetalert'
-
-// import { useRoute } from 'vue-router'
-
 export default {
-  name: 'KeepComponent',
-  props: ['keepProp'],
+  name: 'VaultKeepsComponent',
+  props: ['vKProp'],
   setup(props) {
-    // const route = useRoute()
     const state = reactive({
+      keepData: props.vKProp
     })
     return {
       state,
-      keep: computed(() => props.keepProp),
-      profile: computed(() => AppState.profile),
-      profileVaults: computed(() => AppState.profileVaults),
-
-      async getActiveKeep(keepId) {
-        keepsService.getActiveKeep(keepId)
-      },
-      deleteKeep(keepId) {
+      deleteVK(id) {
         swal({
           title: 'Are you sure?',
           text: 'Once deleted, you will not be able to recover this imaginary file!',
@@ -121,26 +115,15 @@ export default {
               swal('Poof! Your imaginary file has been deleted!', {
                 icon: 'success'
               })
-              keepsService.deleteKeep(keepId)
+              vaultsService.deleteVK(id)
             } else {
               swal('Your imaginary file is safe!')
             }
           })
-      },
-      viewCount() {
-        keepsService.viewCount(props.keepProp.id)
-      },
-      keepCount() {
-        keepsService.keepCount(props.keepProp.id)
-      },
-      addToVault(vaultId, keepId) {
-        vaultsService.addToVault(vaultId, keepId)
-        logger.log(vaultId)
       }
-
     }
   },
-  components: { VaultNamesComponent }
+  components: {}
 }
 </script>
 

@@ -66,7 +66,7 @@ namespace amazen_server.Services
         throw new Exception("This keep does not exist!");
       }
       original.Views++;
-      _repo.Edit(updated);
+      _repo.Edit(original);
       return original;
 
     }
@@ -79,7 +79,7 @@ namespace amazen_server.Services
         throw new Exception("This keep does not exist!");
       }
       original.Keeps++;
-      _repo.Edit(updated);
+      _repo.EditKeepAmount(original);
       return original;
 
     }
