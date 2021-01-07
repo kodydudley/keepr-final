@@ -8,7 +8,6 @@ class VaultsService {
   async create(newVault) {
     try {
       await api.post('api/vaults/', newVault)
-      logger.log(newVault)
     } catch (err) {
       logger.error(err)
     }
@@ -29,9 +28,7 @@ class VaultsService {
         VaultId: vaultId,
         KeepId: keepId
       }
-      logger.log(newVault)
-      const res = await api.post('api/vaultkeeps', newVault)
-      logger.log(res.data)
+      await api.post('api/vaultkeeps', newVault)
     } catch (err) {
       logger.error(err)
     }
@@ -50,7 +47,6 @@ class VaultsService {
     try {
       const res = await api.get('api/vaults/' + id + '/keeps')
       AppState.activeVaultKeeps = res.data
-      logger.log(AppState.activeVaultKeeps)
     } catch (err) {
       logger.error(err)
     }

@@ -7,7 +7,6 @@ class KeepsService {
   async getPublicKeeps() {
     try {
       const res = await api.get('api/keeps')
-      logger.log('all keeps', res.data)
       AppState.keeps = res.data
     } catch (err) {
       logger.error(err)
@@ -27,7 +26,6 @@ class KeepsService {
     try {
       await api.delete('api/keeps/' + keepId)
       this.getPublicKeeps()
-      logger.log(keepId)
     } catch (err) {
       logger.error(err)
     }

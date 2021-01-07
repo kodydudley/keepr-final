@@ -7,7 +7,6 @@ class ProfileService {
     try {
       const res = await api.get('api/profile')
       AppState.profile = res.data
-      logger.log(AppState.profile)
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
     }
@@ -26,7 +25,6 @@ class ProfileService {
     try {
       const res = await api.get('api/profiles/' + profileId + '/keeps')
       AppState.profileKeeps = res.data
-      logger.log('profile Keeps', res.data)
     } catch (err) {
       logger.log(err)
     }
@@ -36,7 +34,6 @@ class ProfileService {
     try {
       const res = await api.get('api/profiles/' + profileId + '/vaults')
       AppState.profileVaults = res.data
-      logger.log('profile Vaults', res.data)
     } catch (err) {
       logger.log(err)
     }
