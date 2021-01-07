@@ -35,11 +35,19 @@ namespace amazen_server.Services
     }
     public string Delete(int id, Profile userInfo)
     {
-      if (_repo.Delete(id))
+      VaultKeep original = _repo.GetById(id);
+      if (original.CreatorId == userInfo.Id)
       {
-        return ("The Vault Keep has been deleted.");
+        if (_repo.Delete(id))
+        {
+          return ("The Vault Keep has been deleted.");
+        }
+        return ("Can't delete");
       }
-      throw new Exception("That didn't work! It's still there!");
+      else
+      {
+        return ("Access not granted!");
+      }
     }
 
     public object GetKeepsByVaultId(int id)

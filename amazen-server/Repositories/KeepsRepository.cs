@@ -44,8 +44,8 @@ namespace amazen_server.Repositories
       keep.*,
       profile.*
       FROM keeps keep
-      JOIN profile profile ON keep.creatorId = profile.id;";
-      return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, splitOn: "id");
+      JOIN profiles profile ON keep.creatorId = profile.id;";
+      return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { profileId }, splitOn: "id");
     }
 
     public Keep GetById(int id)

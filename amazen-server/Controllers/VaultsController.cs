@@ -43,11 +43,12 @@ namespace amazen_server.Controllers
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Vault>> Get()
+    public async Task<ActionResult<Vault>> Get()
     {
       try
       {
-        return Ok(_vs.Get());
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        return Ok(_vs.Get(userInfo.Id));
       }
       catch (System.Exception e)
       {
@@ -56,11 +57,12 @@ namespace amazen_server.Controllers
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Vault> GetById(int id)
+    public async Task<ActionResult<Vault>> GetById(int id)
     {
       try
       {
-        return Ok(_vs.GetById(id));
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        return Ok(_vs.GetById(id, userInfo));
       }
       catch (Exception e)
       {

@@ -21,7 +21,7 @@ namespace amazen_server.Controllers
       _vks = vks;
     }
     [HttpPost]
-    [Authorize]
+    // [Authorize]
     public async Task<ActionResult<VaultKeepsController>> Create([FromBody] VaultKeep newVaultKeep)
     {
       try

@@ -42,14 +42,14 @@ namespace amazen_server.Repositories
     internal object GetKeepsByVaultId(int vaultId)
     {
       string sql = @"
-      SELECT keep.*
+      SELECT keep.*,
       vaultkeep.id as VaultKeepId,
       profile.*
       FROM vaultkeeps vaultkeep
       JOIN keeps keep on keep.id = vaultkeep.keepId
       JOIN profiles profile ON profile.id = keep.creatorId
-      WHERE vaultId = @id;";
-      return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, splitOn: "id");
+      WHERE vaultId = @Vaultid;";
+      return _db.Query<VaultKeepViewModel, Profile, VaultKeepViewModel>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { vaultId }, splitOn: "id");
 
     }
 

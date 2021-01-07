@@ -29,10 +29,7 @@ namespace amazen_server.Services
       {
         throw new Exception("This Profile does not exist!");
       }
-      else
-      {
-        return foundProfile;
-      }
+      return foundProfile;
     }
   }
 }

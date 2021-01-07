@@ -20,14 +20,14 @@ namespace amazen_server.Repositories
     {
       string sql = @"
         INSERT INTO vaults
-        (id, creatorId, name, description, isPrivate)
+        (id, creatorId, name, description, isPrivate, img)
         VALUES
-        (@Id, @CreatorId, @Name, @Description, @IsPrivate);
+        (@Id, @CreatorId, @Name, @Description, @IsPrivate, @Img);
         SELECT LAST_INSERT_ID();";
       return _db.ExecuteScalar<int>(sql, newVault);
     }
 
-    public IEnumerable<Vault> Get()
+    public IEnumerable<Vault> Get(string profileId)
     {
       string sql = populateCreator;
       return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) => { vault.Creator = profile; return vault; }, splitOn: "id");
@@ -44,6 +44,22 @@ namespace amazen_server.Repositories
     {
       string sql = "SELECT * FROM vaults WHERE id = @Id";
       return _db.QueryFirstOrDefault<Vault>(sql, new { id });
+    }
+
+    // internal object GetVaultsByProfileId(string id)
+    // {
+    //   throw new NotImplementedException();
+    // }
+
+    internal IEnumerable<Vault> GetVaultsByProfileId(string profileId)
+    {
+      string sql = @"
+      SELECT
+      vault.*,
+      profile.*
+      FROM vaults vault
+      JOIN profiles profile ON vault.creatorId = profile.id;";
+      return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) => { vault.Creator = profile; return vault; }, new { profileId }, splitOn: "id");
     }
   }
 }

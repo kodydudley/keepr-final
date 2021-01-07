@@ -26,9 +26,9 @@ namespace amazen_server.Services
       return _repo.Get();
     }
 
-    public IEnumerable<Keep> GetKeepsByProfileId(string profileId, string Id)
+    public IEnumerable<Keep> GetKeepsByProfileId(string id)
     {
-      return _repo.GetKeepsByProfileId(profileId);
+      return _repo.GetKeepsByProfileId(id).ToList().FindAll(keep => keep.CreatorId == id);
     }
 
     public Keep GetById(int id)
@@ -43,11 +43,19 @@ namespace amazen_server.Services
 
     public string Delete(int id, Profile userInfo)
     {
-      if (_repo.Delete(id))
+      Keep original = _repo.GetById(id);
+      if (userInfo.Id == original.CreatorId)
       {
-        return ("The keep has been deleted.");
+        if (_repo.Delete(id))
+        {
+          return ("This has been deleted!");
+        }
+        return ("Can't delete");
       }
-      throw new Exception("That didn't work! It's still there!");
+      else
+      {
+        return ("Access not granted!");
+      }
     }
 
     public Keep Edit(Keep updated, Profile userInfo)

@@ -20,27 +20,48 @@ namespace amazen_server.Services
       return newVault;
     }
 
-    public IEnumerable<Vault> Get()
+    public IEnumerable<Vault> Get(string profileId)
     {
-      return _repo.Get();
+      return _repo.Get(profileId).ToList().FindAll(v => v.CreatorId == profileId || !v.IsPrivate);
     }
 
-    public Vault GetById(int id)
+    public Vault GetById(int id, Profile userInfo)
     {
       var foundVault = _repo.GetById(id);
       if (foundVault == null)
       {
         throw new Exception("Invalid Id");
       }
-      return foundVault;
+      else if (!foundVault.IsPrivate || foundVault.CreatorId == userInfo.Id)
+      {
+        return foundVault;
+      }
+      else
+      {
+        throw new Exception("Access not granted!");
+      }
     }
     public string Delete(int id, Profile userInfo)
     {
-      if (_repo.Delete(id))
+      Vault original = _repo.GetById(id);
+      if (userInfo.Id == original.CreatorId)
       {
-        return ("The keep has been deleted.");
+        if (_repo.Delete(id))
+        {
+          return ("This has been deleted!");
+        }
+        return ("Can't delete");
       }
-      throw new Exception("That didn't work! It's still there!");
+      else
+      {
+        return ("Access not granted!");
+      }
     }
+
+    internal object GetVaultsByProfileId(string profileId, string id)
+    {
+      return _repo.GetVaultsByProfileId(id).ToList().FindAll(vault => vault.CreatorId == profileId && !vault.IsPrivate || vault.CreatorId == id);
+    }
+
   }
 }
