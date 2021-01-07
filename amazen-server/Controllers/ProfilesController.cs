@@ -71,7 +71,7 @@ namespace amazen_server.Controllers
     }
 
     [HttpGet("{profileId}/vaults")]
-    [Authorize]
+    // [Authorize]
     public async Task<ActionResult<Profile>> GetVaultsByProfileId(string profileId)
     {
       try
