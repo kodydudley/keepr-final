@@ -66,11 +66,17 @@ namespace amazen_server.Repositories
       string sql = @"
       UPDATE keeps
       SET
-      name = @Name,
-      description = @Description,
-      views = @Views,
-      shares = @Shares,
-      keeps = @keeps
+      views = @Views
+      WHERE id = @Id;";
+      _db.Execute(sql, updated);
+    }
+
+    internal void EditKeepAmount(Keep updated)
+    {
+      string sql = @"
+      UPDATE keeps
+      SET
+      keeps = @Keeps
       WHERE id = @Id;";
       _db.Execute(sql, updated);
     }

@@ -68,13 +68,28 @@ namespace amazen_server.Controllers
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<ActionResult<Keep>> Edit(int id, [FromBody] Keep updated)
+    public async Task<ActionResult<Keep>> Edit(int id, [FromQuery] Keep updated)
     {
       try
       {
         Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
         updated.Id = id;
         return Ok(_ks.Edit(updated, userInfo));
+      }
+      catch (System.Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+    [HttpPut("{id}/keepAmount")]
+    [Authorize]
+    public async Task<ActionResult<Keep>> EditKeepAmount(int id, [FromBody] Keep updated)
+    {
+      try
+      {
+        Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+        updated.Id = id;
+        return Ok(_ks.EditKeepAmount(updated, userInfo));
       }
       catch (System.Exception e)
       {

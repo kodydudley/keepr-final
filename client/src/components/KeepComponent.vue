@@ -1,5 +1,5 @@
 <template>
-  <div class="keepComponent card border-0" @click="viewCount(keep, keep.id)" data-toggle="modal" :data-target="'#keepModal'+ keep.id">
+  <div class="keepComponent card border-0" @click.prevent="viewCount()" data-toggle="modal" :data-target="'#keepModal'+ keep.id">
     <img class="img-fluid round" style="width: 100%; height: auto" :src="keep.img" alt="">
     <div class="card-img-overlay d-flex justify-content-end flex-column text-light">
       <h6 class="text-left text-white">
@@ -7,7 +7,7 @@
       </h6>
     </div>
     <div class="card-img-overlay d-flex justify-content-right">
-      <router-link data-dismiss="modal" :to="{name: 'Profile', params: {profileId: keep.creatorId}}">
+      <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
         <img class="tiny-picture left-side " :src="keep.creator.picture" alt="">
       </router-link>
     </div>
@@ -58,14 +58,16 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a v-for="vault in profileVaults" :key="vault.id" class="dropdown-item" href="#">
-                    <vault-names-component :vault-prop="vault" />
+                    <div @click="addToVault(vault.id, keep.id)">
+                      <vault-names-component :vault-prop="vault" />
+                    </div>
                   </a>
                 </div>
               </div>
               <button v-show="profile.id == keep.creatorId" @click="deleteKeep(keep.id)" type="button" class="btn btn-transparent text-danger bottom-middle">
                 <i class="fa fa-trash" aria-hidden="true"></i>
               </button>
-              <router-link data-dismiss="modal" :to="{name: 'Profile', params: {profileId: keep.creatorId}}">
+              <router-link data-dismiss="modal" :to="{name: 'ActiveProfile', params: {profileId: keep.creatorId}}">
                 <img class="tiny-picture left-side " :src="keep.creator.picture" alt="">
               </router-link>
               <p class="mt-3 bottom-right">
@@ -82,6 +84,7 @@
 <script>
 import { computed, reactive } from 'vue'
 import { keepsService } from '../services/KeepsService'
+import { vaultsService } from '../services/VaultsService'
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import VaultNamesComponent from './VaultNamesComponent.vue'
@@ -107,8 +110,12 @@ export default {
         logger.log(keepId)
         keepsService.deleteKeep(keepId)
       },
-      viewCount(keepId, keep) {
-        keepsService.viewCount(keepId, keep)
+      viewCount() {
+        keepsService.viewCount(props.keepProp.id)
+      },
+      addToVault(vaultId, keepId) {
+        vaultsService.addToVault(vaultId, keepId)
+        logger.log(vaultId)
       }
 
     }

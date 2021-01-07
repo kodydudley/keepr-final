@@ -33,12 +33,20 @@ class KeepsService {
     }
   }
 
-  async viewCount(keep, keepId) {
+  async viewCount(id) {
     try {
-      await api.get('api/keeps/' + keepId)
-      keep.views++
+      await api.put('api/keeps/' + id + '?views=1')
+      this.getPublicKeeps()
     } catch (err) {
       logger.log(err)
+    }
+  }
+
+  async keepCount(keepId) {
+    try {
+      await api.put('api/keeps/' + keepId + '/keepAmount?views=1')
+    } catch (err) {
+      logger.error(err)
     }
   }
 }

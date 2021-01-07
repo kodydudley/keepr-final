@@ -65,15 +65,23 @@ namespace amazen_server.Services
       {
         throw new Exception("This keep does not exist!");
       }
-      if (original.CreatorId != userInfo.Id)
+      original.Views++;
+      _repo.Edit(updated);
+      return original;
+
+    }
+
+    public Keep EditKeepAmount(Keep updated, Profile userInfo)
+    {
+      Keep original = _repo.GetById(updated.Id);
+      if (original == null)
       {
-        throw new Exception("Access Denied! You did not create this Keep!");
+        throw new Exception("This keep does not exist!");
       }
-      else
-      {
-        _repo.Edit(updated);
-        return _repo.GetById(updated.Id);
-      }
+      original.Keeps++;
+      _repo.Edit(updated);
+      return original;
+
     }
   }
 }

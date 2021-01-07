@@ -19,9 +19,9 @@ namespace amazen_server.Repositories
     {
       string sql = @"
         INSERT INTO vaultKeeps
-        (id, creatorId, keepId, vaultId)
+        (creatorId, keepId, vaultId)
         VALUES
-        (@Id, @CreatorId, @KeepId, @VaultId);
+        (@CreatorId, @KeepId, @VaultId);
         SELECT LAST_INSERT_ID();";
       return _db.ExecuteScalar<int>(sql, newVaultKeep);
     }

@@ -1,6 +1,8 @@
 <template>
   <div class="vaultNamesComponent">
-    {{ profileVaults.name }}
+    <button class="btn btn-transparent">
+      {{ profileVaults.name }}
+    </button>
   </div>
 </template>
 
